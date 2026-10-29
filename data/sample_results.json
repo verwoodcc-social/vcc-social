@@ -1,0 +1,40 @@
+{
+  "kind": "results",
+  "title": "Weekend Results",
+  "date_range": "24 – 25 October 2026",
+  "matches": [
+    {
+      "id": 7758947,
+      "date": "Sun 25 Oct",
+      "team": "Indoor C",
+      "opponent": "Poole Town CC Indoor D",
+      "home": true,
+      "verwood_score": "141/2 (11.3)",
+      "opp_score": "140/4 (12.0)",
+      "outcome": "W",
+      "summary": "Won by 4 wickets"
+    },
+    {
+      "id": 7759960,
+      "date": "Sat 24 Oct",
+      "team": "Girls U13 Indoor",
+      "opponent": "New Milton CC Girls U13 Indoor",
+      "home": true,
+      "verwood_score": "118 all out (10.5)",
+      "opp_score": "188 all out (12.0)",
+      "outcome": "L",
+      "summary": "Lost by 70 runs"
+    },
+    {
+      "id": 7759672,
+      "date": "Sat 24 Oct",
+      "team": "U10 A Indoor",
+      "opponent": "Christchurch CC U10B Indoor",
+      "home": false,
+      "verwood_score": "137 all out (10.3)",
+      "opp_score": "132/2 (7.0)",
+      "outcome": "P",
+      "summary": "Result to follow"
+    }
+  ]
+}

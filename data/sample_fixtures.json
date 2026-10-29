@@ -1,0 +1,13 @@
+{
+  "kind": "fixtures",
+  "title": "This Week's Fixtures",
+  "date_range": "29 Oct – 4 Nov 2026",
+  "matches": [
+    {"date": "Thu 29 Oct", "time": "19:15", "team": "Indoor D", "opponent": "Bournemouth CC Indoor E", "home": false},
+    {"date": "Sat 31 Oct", "time": "11:10", "team": "U13 Indoor", "opponent": "Christchurch CC U13 Indoor", "home": false},
+    {"date": "Sat 31 Oct", "time": "14:25", "team": "Under 9 Indoor", "opponent": "Lions Youth CC Strikers", "home": true},
+    {"date": "Sun 1 Nov", "time": "16:45", "team": "Indoor E", "opponent": "Bournemouth CC Indoor F", "home": false},
+    {"date": "Tue 3 Nov", "time": "21:15", "team": "Women's Softball Indoor B", "opponent": "Christchurch CC Womens Indoor", "home": true},
+    {"date": "Wed 4 Nov", "time": "19:15", "team": "Women's Softball", "opponent": "New Milton CC Womens Softball", "home": false}
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "kind": "match",
+  "id": 7758947,
+  "date": "Sunday 25 October 2026",
+  "competition": "Indoor League",
+  "team": "Indoor C",
+  "opponent": "Poole Town CC",
+  "opponent_team": "Indoor D",
+  "outcome": "W",
+  "summary": "Verwood won by 4 wickets",
+  "verwood_score": "141/2",
+  "verwood_overs": "11.3 overs",
+  "opp_score": "140/4",
+  "opp_overs": "12.0 overs",
+  "toss": "Verwood won the toss and elected to field",
+  "points": "22 pts – 6 pts",
+  "top_batting": [
+    {"name": "Ben Tipping", "figures": "29*", "detail": "19 balls"},
+    {"name": "James Butt", "figures": "27*", "detail": "16 balls"},
+    {"name": "George Crossley", "figures": "26*", "detail": "11 balls"}
+  ],
+  "top_bowling": [
+    {"name": "George Crossley", "figures": "1-30", "detail": "3 overs"},
+    {"name": "Ben Tipping", "figures": "0-18", "detail": "2 overs"}
+  ]
+}
