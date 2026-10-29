@@ -1,8 +1,9 @@
 # Verwood CC — Play-Cricket to social media
 
 Turns Verwood CC's Play-Cricket results and fixtures into club-branded graphics and queues
-them in Metricool (Facebook + Instagram) **for review**. Nothing goes live until someone
-approves it in Metricool.
+them in Metricool (Facebook + Instagram) as **drafts**. Nothing goes live until someone
+opens the draft in Metricool's planner and schedules or publishes it. (Metricool's
+approval workflow needs a paid plan; drafts give the same check on the free plan.)
 
 | Post | Run | Content | Mode |
 |---|---|---|---|
@@ -10,7 +11,7 @@ approves it in Metricool.
 | Results round-up | Monday 08:00 | All Verwood results from the previous 7 days (Mon–Sun) | `roundup` |
 | Match result | Daily 07:00 | One post per match played **yesterday** that has a result and a scorecard | `matches` |
 
-Each post is queued in Metricool for review with a publish time one hour after the run.
+Each post is saved as a Metricool draft with a suggested publish time one hour after the run.
 A match whose scorecard is entered after the 07:00 run the next day gets no individual
 post, but still appears in Monday's round-up.
 
@@ -32,8 +33,9 @@ post, but still appears in Monday's round-up.
 3. **Render**: `python3 render.py data/<file>.json` → PNGs in `out/` (1080×1350; more than 6 rows becomes a carousel).
 4. **Check** each PNG against the raw extract (teams, scores, result) before queueing.
 5. **Publish images** to this repo under `posts/YYYY-MM-DD/` and use their raw.githubusercontent.com URLs.
-6. **Queue in Metricool** (brand "Verwood Cricket Club", blogId 6985978) with
-   `createScheduledPostForReview`, networks Facebook (POST) + Instagram (POST), image URL(s) in `media`, caption as `text`, publish time one hour after the run.
+6. **Save as a Metricool draft** (brand "Verwood Cricket Club", blogId 6985978) with
+   `createScheduledPost` and `"draft": true`, networks Facebook (POST) + Instagram (POST), image URL(s) in `media`,
+   alt text in `mediaAltText`, caption as `text`, publish time one hour after the run (Europe/London).
 7. If there are no matches, post nothing.
 
 ## Rules
