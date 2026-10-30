@@ -22,7 +22,7 @@ post, but still appears in Monday's round-up.
    - Results: open `https://verwood.play-cricket.com/Matches?tab=WeeklyResult`, run `extract/weekly.js`, save to `raw/results.json`.
    - Daily run only: run `python3 prepare.py matches raw/results.json` first; it prints yesterday's match ids
      (on stderr). For each id, open `https://verwood.play-cricket.com/website/results/<id>`, run
-     `extract/scorecard.js`, save to `raw/scorecard_<id>.json`. If the output is cut off, re-read the `tables` in parts.
+     `extract/scorecard.js`, save to `raw/scorecard_<id>.json`. If the output is cut off, read the saved copy in slices with `window.__sc.slice(0, 800)`, `window.__sc.slice(800)`, … and join them. The script handles both classic table scorecards and app-scored (e.g. Indoor) matches, where it clicks the SCORECARD tab and each innings tab itself — its output has `"layout": "table"` or `"ias"`. If `tables` comes back empty, the scorecard really isn't uploaded yet.
 2. **Prepare**:
    - Friday: `python3 prepare.py fixtures raw/fixtures.json`
    - Monday: `python3 prepare.py roundup raw/results.json`
