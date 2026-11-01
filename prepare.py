@@ -86,10 +86,16 @@ def results(raw, since=None, until=None):
         code, text = outcome(m["status"], CLUB)
         if code == "W": text = re.sub(r"^.*?won", "Won", text, flags=re.I)
         if code == "L": text = re.sub(r"^.*?won", "Lost", text, flags=re.I)
-        rows.append({"id": m.get("id"), "date": short_date(m["date"]), "team": m["sides"][us]["team"],
-                     "opponent": opp_label(them), "home": us == 0,
-                     "verwood_score": tidy_score(m["sides"][us]["score"]) or "–",
-                     "opp_score": tidy_score(them["score"]) or "–", "outcome": code, "summary": text})
+        mine = m["sides"][us]
+        row = {"id": m.get("id"), "date": short_date(m["date"]), "team": mine["team"],
+               "opponent": opp_label(them), "home": us == 0,
+               "verwood_score": tidy_score(mine["score"]) or "–",
+               "opp_score": tidy_score(them["score"]) or "–", "outcome": code, "summary": text}
+        if mine.get("net") is not None and them.get("net") is not None:
+            # Pairs cricket: the result is decided on net score, so lead with it; keep runs/wickets as detail.
+            row.update(pairs=True, verwood_raw=row["verwood_score"], opp_raw=row["opp_score"],
+                       verwood_score=f"{mine['net']} net", opp_score=f"{them['net']} net")
+        rows.append(row)
     return {"kind": "results", "title": "Last Week's Results",
             "date_range": date_range(dates), "matches": rows}
 
@@ -135,7 +141,7 @@ def match_card(row, sc):
     our_bowl = bowl[1 - ui]["rows"] if len(bowl) > 1 - ui else []
     batting = []
     for r in our_bat:  # Name | How out | Bowler | R | B | 4s | 6s | SR  (how-out may be merged into name)
-        nums = [c for c in r if re.fullmatch(r"\d+(\.\d+)?", c)]
+        nums = [c for c in r if re.fullmatch(r"-?\d+(\.\d+)?", c)]  # pairs cricket can give negative runs
         if len(nums) < 2: continue
         name = strip_dismissal(r[0], "".join(r[1:3]))
         notout = any("not out" in c for c in r[:3])
@@ -148,8 +154,12 @@ def match_card(row, sc):
                         "figures": f"{r[4]}-{r[3]}", "detail": f"{r[1].removesuffix('.0')} overs"})
     batting.sort(key=lambda p: (-p["runs"], num(p["balls"])))
     bowling.sort(key=lambda p: (-p["w"], p["r"]))
-    us_score, us_ov = split_score(row["verwood_score"])
-    op_score, op_ov = split_score(row["opp_score"])
+    pairs = row.get("pairs", False)
+    us_score, us_ov = split_score(row["verwood_raw"] if pairs else row["verwood_score"])
+    op_score, op_ov = split_score(row["opp_raw"] if pairs else row["opp_score"])
+    if pairs:  # big number = net score; runs/wickets and overs underneath
+        us_score, us_ov = row["verwood_score"].removesuffix(" net"), f"Net score · {us_score}, {us_ov}"
+        op_score, op_ov = row["opp_score"].removesuffix(" net"), f"Net score · {op_score}, {op_ov}"
     opp_club, _, opp_team = row["opponent"].partition(" CC")
     toss = next((h for h in sc.get("header", []) if "toss" in h.lower()), "")
     return {"kind": "match", "id": row["id"], "date": row["date"], "team": row["team"],
@@ -157,7 +167,8 @@ def match_card(row, sc):
             "outcome": row["outcome"],
             "summary": ("Verwood " + row["summary"][0].lower() + row["summary"][1:]) if row["outcome"] in "WL" else row["summary"],
             "verwood_score": us_score, "verwood_overs": us_ov, "opp_score": op_score, "opp_overs": op_ov,
-            "toss": "", "points": "", "top_batting": batting[:3], "top_bowling": [b for b in bowling if b["w"] > 0][:3] or bowling[:2],
+            "pairs": pairs, "toss": "", "points": "Pairs cricket – result decided on net score" if pairs else "",
+            "top_batting": batting[:3], "top_bowling": [b for b in bowling if b["w"] > 0][:3] or bowling[:2],
             "_toss_raw": toss}
 
 
@@ -182,7 +193,9 @@ def caption_match(m):
     if m["top_batting"]: perf.append(f"{m['top_batting'][0]['name']} top-scored with {m['top_batting'][0]['figures']}")
     if m["top_bowling"] and m["top_bowling"][0]["w"] > 0: perf.append(f"{m['top_bowling'][0]['name']} took {m['top_bowling'][0]['figures']}")
     return "\n".join([f"{head} our {m['team']}! {m['summary']} v {m['opponent']} {m['opponent_team']}.".replace("  ", " "),
-                      f"Verwood {m['verwood_score']} ({m['verwood_overs']}) · {m['opponent']} {m['opp_score']} ({m['opp_overs']})",
+                      (f"Pairs cricket, net scores: Verwood {m['verwood_score']} · {m['opponent']} {m['opp_score']}"
+                       if m.get("pairs") else
+                       f"Verwood {m['verwood_score']} ({m['verwood_overs']}) · {m['opponent']} {m['opp_score']} ({m['opp_overs']})"),
                       (" · ".join(perf) + ".") if perf else "", "", HASHTAGS]).replace("\n\n\n", "\n\n")
 
 

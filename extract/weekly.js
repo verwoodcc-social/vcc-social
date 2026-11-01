@@ -21,7 +21,9 @@
         while (L[i] && /^(\d+|pts|Vs)$/.test(L[i])) i++;
         const t = (L[i++] || '').match(teamRe) || [];
         const score = L[i] && /\d+ ?\/ ?(\d+|All out)|^\d+$/.test(L[i]) && !teamRe.test(L[i]) ? L[i++] : '';
-        m.sides.push({ club: (t[1] || '').trim(), team: (t[2] || '').trim(), score });
+        // Pairs cricket (e.g. U9 Indoor) adds "Net Score N" under each score; the result is decided on it.
+        const nm = L[i] && L[i].match(/^Net Score (-?\d+)$/); if (nm) i++;
+        m.sides.push({ club: (t[1] || '').trim(), team: (t[2] || '').trim(), score, ...(nm ? { net: nm[1] } : {}) });
       }
       m.id = ids[out.length] || null; out.push(m);
     } else {
